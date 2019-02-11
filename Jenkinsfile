@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'chef/inspec'
+      image 'darknerd/inspec'
     }
   }
   environment {
