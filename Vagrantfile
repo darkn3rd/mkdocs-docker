@@ -46,6 +46,16 @@ SCRIPT
   fi
 SCRIPT
 
+@rbenv_install = <<SCRIPT
+  if [[ ! -d $HOME/.rbenv ]]; then
+    curl -fsSL https://github.com/rbenv/rbenv-installer/raw/master/bin/rbenv-installer | bash
+    echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc
+    echo 'eval "$(rbenv init -)"' >> ~/.bashrc
+  else
+    echo "'$HOME/.rbenv' already exists, skipping"
+  fi
+SCRIPT
+
 @python_install = <<SCRIPT
   export PATH="$HOME/.pyenv/bin:$PATH"
   eval "$(pyenv init -)"
@@ -54,10 +64,24 @@ SCRIPT
   pip install --upgrade pip
 SCRIPT
 
+@ruby_install = <<SCRIPT
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+  rbenv install 2.5.3
+  rbenv global 2.5.3
+  echo 'gem: --no-document' >> ~/.gemrc
+SCRIPT
+
 @mkdocs_install = <<SCRIPT
   export PATH="$HOME/.pyenv/bin:$PATH"
   eval "$(pyenv init -)"
   pip install mkdocs
+SCRIPT
+
+@inspec_install = <<SCRIPT
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+  gem install inspec
 SCRIPT
 ###############
 
@@ -76,5 +100,10 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: @pyenv_install, :privileged => false
   config.vm.provision "shell", inline: @python_install, :privileged => false
   config.vm.provision "shell", inline: @mkdocs_install, :privileged => false
+
+  # Ruby Dev Environemnt (local)
+  config.vm.provision "shell", inline: @rbenv_install, :privileged => false
+  config.vm.provision "shell", inline: @ruby_install, :privileged => false
+  config.vm.provision "shell", inline: @inspec_install, :privileged => false
 end
 
