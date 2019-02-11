@@ -58,3 +58,17 @@ make test
 make stop
 make clean
 ```
+
+### **CI Pipeline with Jenkins**
+
+A `Jenkinsfile` is provided to use with Jenkins 2.0.  A test Jenkins environment is provided.  If you have Docker Compose installed, you can test this with:
+
+```bash
+# Start Jenkins environment
+docker-compose up -d
+# Search logs for master administrator password
+docker-compose logs
+# Navigate to localhost:8080
+```
+
+After this, access Jenkins with `localhost:8080`, and then manually import the project's Jenkinsfile to create a pipeline.
