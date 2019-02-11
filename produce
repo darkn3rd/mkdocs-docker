@@ -1,4 +1,0 @@
-#!/bin/sh
-mkdocs build
-tar czf /tmp/output.tar.gz site
-cat /tmp/output.tar.gz

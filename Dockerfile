@@ -10,8 +10,8 @@ RUN pip install -r ${APPDIR}/requirements.txt
 
 # Install Custom Scripts
 ADD . ${APPDIR}/
-RUN ln -s ${APPDIR}/serve /usr/local/bin/serve
-RUN ln -s ${APPDIR}/produce /usr/local/bin/produce
+RUN ln -s ${APPDIR}/mkdockerize.sh /usr/local/bin/serve
+RUN ln -s ${APPDIR}/mkdockerize.sh /usr/local/bin/produce
 
 # Working Directory documentation dir mount
 VOLUME ${DOCDIR}
