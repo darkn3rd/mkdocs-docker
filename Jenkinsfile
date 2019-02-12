@@ -15,6 +15,8 @@ pipeline {
     }
     stage('Test') {
       steps {
+        sh 'make mock'
+        sh 'docker ps'
         sh 'make test'
       }
     }
