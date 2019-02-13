@@ -31,11 +31,14 @@
   usermod -aG docker 'vagrant'
 SCRIPT
 
-@pyenv_install = <<SCRIPT
+@devtools_install = <<SCRIPT
   sudo apt-get update -qq
   sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
     xz-utils tk-dev libffi-dev liblzma-dev python-openssl
+SCRIPT
+
+@pyenv_install = <<SCRIPT
   if [[ ! -d $HOME/.pyenv ]]; then
     curl https://pyenv.run | bash
     echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc
@@ -78,6 +81,12 @@ SCRIPT
   pip install mkdocs
 SCRIPT
 
+@dockercompose_install = <<SCRIPT
+  export PATH="$HOME/.pyenv/bin:$PATH"
+  eval "$(pyenv init -)"
+  pip install docker-compose
+SCRIPT
+
 @inspec_install = <<SCRIPT
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
@@ -88,22 +97,39 @@ SCRIPT
 # default virtual provider if VBOX_PROVIDER not set
 @provider = ENV['VBOX_PROVIDER'] || RUBY_PLATFORM =~ /mingw32/ ? 'hyperv' : 'virtualbox'
 
-Vagrant.configure("2") do |config|
+Vagrant.configure('2') do |config|
   config.vm.provider @provider
-  config.vm.box = "bento/ubuntu-16.04"
-  config.vm.hostname = "workstation.dev"
+  config.vm.box = 'bento/ubuntu-16.04'
+  config.vm.hostname = 'workstation.dev'
 
+  # map port 8080 to localhost (127.0.0.1)
+  config.vm.network 'forwarded_port', guest: 8080, host: 8080
+  
   # Docker Dev Enivironment
-  config.vm.provision "shell", inline: @docker_install
+  config.vm.provision :shell, inline: @docker_install, name: 'docker_install'
+
+  # Common Dev Tools for both Python and Ruby
+  config.vm.provision :shell, inline: @devtools_install, 
+    name: 'devtools_install', privileged: false
 
   # Python Dev Environment (local)
-  config.vm.provision "shell", inline: @pyenv_install, :privileged => false
-  config.vm.provision "shell", inline: @python_install, :privileged => false
-  config.vm.provision "shell", inline: @mkdocs_install, :privileged => false
+  config.vm.provision :shell, inline: @pyenv_install, 
+    name: 'pyenv_install', privileged: false
+  config.vm.provision :shell, inline: @python_install, 
+    name: 'python_install', privileged: false
+  config.vm.provision :shell, inline: @mkdocs_install, 
+    name: 'mkdocs_install', privileged: false
 
   # Ruby Dev Environemnt (local)
-  config.vm.provision "shell", inline: @rbenv_install, :privileged => false
-  config.vm.provision "shell", inline: @ruby_install, :privileged => false
-  config.vm.provision "shell", inline: @inspec_install, :privileged => false
+  config.vm.provision :shell, inline: @rbenv_install, 
+    name: 'rbenv_install', privileged: false
+  config.vm.provision :shell, inline: @ruby_install, 
+    name: 'ruby_install', privileged: false
+  config.vm.provision :shell, inline: @inspec_install, 
+    name: 'inspec_install', privileged: false
+
+  # Docker-Compose Support
+  config.vm.provision :shell, inline: @dockercompose_install, 
+    name: 'docker-compose_install', privileged: false
 end
 

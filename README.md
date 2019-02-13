@@ -61,7 +61,17 @@ make clean
 
 ### **CI Pipeline with Jenkins**
 
-A `Jenkinsfile` is provided to use with Jenkins 2.0.  A test Jenkins environment is provided.  If you have Docker Compose installed, you can test this with:
+A `Jenkinsfile` is provided to use with Jenkins 2.0.  This requires a build agent that supports both [Docker](https://www.docker.com/) and [InSpec](https://www.inspec.io/). 
+
+#### **Demo Jenkins Environment (Experimental)**
+
+Currently experimenting with creating a demonstration Jenkins enviornment.  A [Docker Compose](https://docs.docker.com/compose/) script is provided to facilitate this.  This only works on Linux and macOS due to mounting of Unix domain socket.
+
+Additionally, the [Vagrant](https://www.vagrantup.com/) also includes all the necessary tools to support this, and port maps port `8080` on localhost, should you want to use this solution.  If you already have something listening on `8080`, you can edit the provided `Vagrantfile` to use a different port.
+
+#### **General Jenkins Instructions**
+
+A test Jenkins environment is provided.  If you have Docker Compose installed, you can test this with:
 
 ```bash
 # Start Jenkins environment
@@ -71,4 +81,22 @@ docker-compose logs
 # Navigate to localhost:8080
 ```
 
-After this, access Jenkins with `localhost:8080`, and then manually import the project's Jenkinsfile to create a pipeline.
+Use the administrator password from the logs when logging into `localhost:8080`, and then follow these steps:
+
+1. Enter in user, password, etc.  For local dev environment, `jenkins/jenkins` is fine.
+* Select `Create New Job`
+* Enter a name like `mkdocs-docker` for project name
+* Select Pipeline
+* Hit `OK`
+* In Pipeline, select `Pipeline script from SCM`
+* In SCM fiield, select `Git`
+* For `Repository URL`, use `http://github.com/darkn3rd/mkdocs-docker`
+* Branch (until merged to master): `Jenkins`
+
+#### **Docker-on-Docker-in-Docker**
+
+The process of building applications with a distributed Jenkins using Docker is called *Docker-on-Docker*, where Jenkins agents will use host's Docker engine.  It gets complicated when you need to build images and test containers, as this uses *Docker-in-Docker* pattern.
+
+This process of building a Docker image and testing Docker container requires using Docker-in-Docker pattern.  
+
+Work In the process of researching this pattern (2019年2月13日).
