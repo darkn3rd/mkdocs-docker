@@ -2,6 +2,10 @@ pipeline {
   agent {
     docker {
       image 'darknerd/inspec'
+      docker { image 'ruby' }.inside {
+        checkout scm
+        sh 'gem install inspec'
+      }
     }
   }
   environment {
