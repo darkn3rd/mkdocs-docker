@@ -1,28 +1,35 @@
-pipeline {
-  agent {
-    docker {
-      image 'darknerd/inspec'
-      docker { image 'ruby' }.inside {
-        checkout scm
-        sh 'gem install inspec'
-      }
+node('node') {
+    currentBuild.result = "SUCCESS"
+    def mkdocsImage
+
+    try {
+
+       stage('Checkout'){
+          checkout scm
+       }
+
+      //  stage('Test') {
+      //    def mkdocsImage = docker.build("darknerd/mkdocs:${env.BUILD_ID}")
+      //    mkdocsImage.withRun() { c ->
+      //     mkdocsImage.inside("--link ${c.id}:mk") { } 
+      //     docker.image('chef/inspec').inside("--link ${c.id}:mk") {
+      //       sh "inspec exec test/integration -t docker://${c.id}"
+      //     }
+      //   }
+      //  }
+
+       stage('Build Docker') {
+         mkdocsImage = docker.build("darknerd/mkdocs:${env.BUILD_ID}")
+       }
+
+       stage('Push'){
+         mkdocsImage.push('latest')
+       }
+
     }
-  }
-  environment {
-    CI = 'true'
-  }
-  stages {
-    stage('Build') {
-      steps {
-        sh 'make build'
-      }
+    catch (err) {
+        currentBuild.result = "FAILURE"
+        throw err
     }
-    stage('Test') {
-      steps {
-        sh 'make mock'
-        sh 'docker ps'
-        sh 'make test'
-      }
-    }
-  }
+
 }
