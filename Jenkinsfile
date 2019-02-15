@@ -14,10 +14,10 @@ node {
 
        stage('Test') {
           mkdocsImage.withRun("-v ${pwd()}/test/mock:/opt/docs -p 8000:8000", 'serve') { c ->
-            mkdocsImage.inside("--link ${c.id}:mk") {
-              sh 'echo MKDOCS PWD=$(pwd)' 
-            }
-            docker.image('chef/inspec').inside("--link ${c.id}:mk") {
+            // mkdocsImage.inside("--link ${c.id}:mk") {
+            //   sh 'echo MKDOCS PWD=$(pwd)' 
+            // }
+            docker.image('chef/inspec').inside("-t --rm -v ${pwd()}:/share","exec test/integration") {
               sh 'echo INSPEC PWD=$(pwd)'
             }
           }
