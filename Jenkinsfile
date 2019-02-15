@@ -13,8 +13,8 @@ node {
        }
 
        stage('Test') {
-          mkdocsImage.withRun("--rm -d -v ${env.PWD}/test/mock:/opt/docs -p 8000:8000", 'serve') { c ->
-            docker.image('chef/inspec').withRun("-t --rm -v ${env.PWD}:/share","exec test/integration") 
+          mkdocsImage.withRun("--rm -v ./test/mock:/opt/docs -p 8000:8000", 'serve') { c ->
+            docker.image('chef/inspec').withRun("-t --rm -v .:/share","exec test/integration") 
           }
        }
 
