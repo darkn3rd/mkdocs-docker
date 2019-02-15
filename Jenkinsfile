@@ -12,15 +12,14 @@ node {
          mkdocsImage = docker.build("darknerd/mkdocs:${env.BUILD_ID}")
        }
 
-      //  stage('Test') {
-      //    def mkdocsImage = docker.build("darknerd/mkdocs:${env.BUILD_ID}")
-      //    mkdocsImage.withRun() { c ->
-      //     mkdocsImage.inside("--link ${c.id}:mk") { } 
-      //     docker.image('chef/inspec').inside("--link ${c.id}:mk") {
-      //       sh "inspec exec test/integration -t docker://${c.id}"
-      //     }
-      //   }
-      //  }
+       stage('Test') {
+         mkdocsImage.withRun() { c ->
+          mkdocsImage.inside("--link ${c.id}:mk") { } 
+          docker.image('chef/inspec').inside("--link ${c.id}:mk") {
+            sh "inspec exec test/integration -t docker://${c.id}"
+          }
+        }
+       }
 
       // ##### CREDENTIALS NEEDED FOR THIS PROCESS TO WORK
       //  stage('Push'){
