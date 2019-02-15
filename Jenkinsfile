@@ -13,12 +13,9 @@ node {
        }
 
        stage('Test') {
-         mkdocsImage.withRun() { c ->
-          mkdocsImage.inside("--link ${c.id}:mk") { } 
-          docker.image('chef/inspec').inside("--link ${c.id}:mk") {
-            sh "inspec exec test/integration -t docker://${c.id}"
+          mkdocsImage.withRun("--rm -d -v ${env.PWD}/test/mock:/opt/docs -p 8000:8000", 'serve') { c ->
+            docker.image('chef/inspec').withRun("-t --rm -v ${env.PWD}:/share","exec test/integration") 
           }
-        }
        }
 
       // ##### CREDENTIALS NEEDED FOR THIS PROCESS TO WORK
