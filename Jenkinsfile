@@ -17,7 +17,7 @@ node {
             // mkdocsImage.inside("--link ${c.id}:mk") {
             //   sh 'echo MKDOCS PWD=$(pwd)' 
             // }
-            docker.image('chef/inspec').inside("-t --rm -v ${pwd()}:/share","exec test/integration") {
+            docker.image('chef/inspec').inside("-t --rm -v /opt/docs:/share","exec test/integration") {
               sh 'echo INSPEC PWD=$(pwd)'
             }
           }
