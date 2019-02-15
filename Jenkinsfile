@@ -8,6 +8,10 @@ node {
           checkout scm
        }
 
+       stage('Build Docker') {
+         mkdocsImage = docker.build("darknerd/mkdocs:${env.BUILD_ID}")
+       }
+
       //  stage('Test') {
       //    def mkdocsImage = docker.build("darknerd/mkdocs:${env.BUILD_ID}")
       //    mkdocsImage.withRun() { c ->
@@ -18,13 +22,10 @@ node {
       //   }
       //  }
 
-       stage('Build Docker') {
-         mkdocsImage = docker.build("darknerd/mkdocs:${env.BUILD_ID}")
-       }
-
-       stage('Push'){
-         mkdocsImage.push('latest')
-       }
+      // ##### CREDENTIALS NEEDED FOR THIS PROCESS TO WORK
+      //  stage('Push'){
+      //    mkdocsImage.push('latest')
+      //  }
 
     }
     catch (err) {
