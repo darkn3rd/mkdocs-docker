@@ -13,11 +13,11 @@ node {
        }
 
        stage('Test') {
-          sh 'echo OUTER PWD=$(pwd)'
-          mkdocsImage.withRun("--rm -v ${pwd()}/test/mock:/opt/docs -p 8000:8000", 'serve') { c ->
-            sh 'echo INNER PWD=$(pwd)'
-            docker.image('chef/inspec').withRun("-t --rm -v ${env.PWD}:/share","exec test/integration") 
-          }
+          mkdocsImage.withRun("-v ${pwd()}/test/mock:/opt/docs -p 8000:8000", 'serve')
+          // { c ->
+          //  sh 'echo INNER PWD=$(pwd)'
+          //  docker.image('chef/inspec').withRun("-t --rm -v ${env.PWD}:/share","exec test/integration") 
+          //}
        }
 
       // ##### CREDENTIALS NEEDED FOR THIS PROCESS TO WORK
