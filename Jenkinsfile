@@ -18,13 +18,11 @@ node {
           mkdocsImage.withRun(options, 'serve') { c ->
             // Install Ruby + InSpec
             def sys_libs = "build-dependencies build-base"
-            def ruby_base = "ruby ruby-bundler ruby-dev ruby-json"
+            def ruby_base = "ruby ruby-bundler ruby-dev ruby-json ruby-io-console ruby-bundler"
             def ruby_libs = "libxml2-dev libffi-dev libxslt-dev zlib-dev"
             sh "apk --update add --virtual ${sys_libs} ${ruby_base} ${ruby_libs}"
             // git openssh-client
-            sh 'which gem'
-            sh 'gem --version'
-            sh 'gem list'
+
             //sh 'gem update --system'
             sh 'gem install inspec'
             sh "inspec exec ${pwd()}/test/integration/default -t docker://${c.id}"
