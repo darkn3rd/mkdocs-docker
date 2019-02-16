@@ -21,12 +21,18 @@ node {
             build-base libxml2-dev libffi-dev git openssh-client
             sh 'gem update --no-document --system'
             sh 'gem install inspec --no-ri --no-rdoc'
-
-            // Run Tests
             sh "inspec exec ${pwd()}/test/integration/default -t docker://${c.id}"
           }
+          // { c ->
+          //  sh 'echo INNER PWD=$(pwd)'
+          //  docker.image('chef/inspec').withRun("-t --rm -v ${env.PWD}:/share","exec test/integration") 
+          //}
        }
 
+      // ##### CREDENTIALS NEEDED FOR THIS PROCESS TO WORK
+      //  stage('Push'){
+      //    mkdocsImage.push('latest')
+      //  }
 
     }
     catch (err) {
