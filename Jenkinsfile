@@ -14,7 +14,7 @@ node {
 
        stage('Test') {
           mkdocsImage.withRun("-v ${pwd()}/test/mock:/opt/docs -p 8000:8000", 'serve') { c ->
-            sh "echo ls -la"
+            sh "gem install inspec --no-ri --no-rdoc"
             // sh 'apt-get -yqq update'
             // sh 'apt install build-essential'
             // sh 'ruby --version'
