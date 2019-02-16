@@ -19,6 +19,7 @@ node {
             // Install Ruby + InSpec
             sh 'apk --update add --virtual build-dependencies ruby-dev build-base'
             sh 'gem install inspec --no-ri --no-rdoc'
+            sh "ls ${pwd()}/test/integration"
             sh "inspec exec test/integration -t docker://${c.id}"
           }
           // { c ->
