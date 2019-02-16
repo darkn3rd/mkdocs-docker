@@ -14,7 +14,7 @@ node {
 
        stage('Test') {
           def doc_mount = "${pwd()}/test/mock:/opt/docs"
-          def options = "-v ${doc_mount} -p 8000:8000"
+          def options = "-v ${doc_mount} -p 8000:8000 --name mkdocs_jenkins"
           mkdocsImage.withRun(options, 'serve') { c ->
             // Install Ruby + InSpec
             def sys_libs = "build-dependencies build-base"
@@ -25,7 +25,7 @@ node {
 
             //sh 'gem update --system'
             sh 'gem install --no-document inspec'
-            sh "inspec exec ${pwd()}/test/integration/default -t docker://${c.id}"
+            sh "inspec exec ${pwd()}/test/integration/default -t docker://${c.name}"
           }
 
        }
