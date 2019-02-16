@@ -22,7 +22,9 @@ node {
             def ruby_libs = "libxml2-dev libffi-dev libxslt-dev zlib-dev"
             sh "apk --update add --virtual ${sys_libs} ${ruby_base} ${ruby_libs}"
             // git openssh-client
-             
+            sh 'which gem'
+            sh 'gem --version'
+            sh 'gem list'
             //sh 'gem update --system'
             sh 'gem install inspec'
             sh "inspec exec ${pwd()}/test/integration/default -t docker://${c.id}"
