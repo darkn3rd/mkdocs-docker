@@ -24,7 +24,7 @@ node {
             // git openssh-client
 
             //sh 'gem update --system'
-            sh 'gem install inspec'
+            sh 'gem install --no-document inspec'
             sh "inspec exec ${pwd()}/test/integration/default -t docker://${c.id}"
           }
 
