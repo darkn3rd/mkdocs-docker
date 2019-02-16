@@ -16,17 +16,18 @@ node {
           def doc_mount = "${pwd()}/test/mock:/opt/docs"
           def options = "-v ${doc_mount} -p 8000:8000 --name mkdocs_jenkins"
           mkdocsImage.withRun(options, 'serve') { c ->
-            // Install Ruby + InSpec
-            def sys_libs = "build-dependencies build-base"
-            def ruby_base = "ruby ruby-bundler ruby-dev ruby-json ruby-io-console ruby-bundler ruby-rdoc"
-            def ruby_libs = "libxml2-dev libffi-dev libxslt-dev zlib-dev"
-            sh "apk --update add --virtual ${sys_libs} ${ruby_base} ${ruby_libs}"
-            // git openssh-client
+            // // Install Ruby + InSpec
+            // def sys_libs = "build-dependencies build-base"
+            // def ruby_base = "ruby ruby-bundler ruby-dev ruby-json ruby-io-console ruby-bundler ruby-rdoc"
+            // def ruby_libs = "libxml2-dev libffi-dev libxslt-dev zlib-dev"
+            // sh "apk --update add --virtual ${sys_libs} ${ruby_base} ${ruby_libs}"
+            // // git openssh-client
 
-            //sh 'gem update --system'
-            sh 'gem install --no-document inspec'
+            // //sh 'gem update --system'
+            // sh 'gem install --no-document inspec'
             sh 'docker ps'
-            sh "inspec exec ${pwd()}/test/integration/default -t docker://mkdocs_jenkins_1"
+            sh 'curl localhost:8000'
+            //sh "inspec exec ${pwd()}/test/integration/default -t docker://mkdocs_jenkins_1"
           }
 
        }
