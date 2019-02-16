@@ -14,10 +14,10 @@ node {
 
        stage('Test') {
           mkdocsImage.withRun("-v ${pwd()}/test/mock:/opt/docs -p 8000:8000", 'serve') { c ->
+            // Install Ruby + InSpec
             sh 'apk --update add --virtual build-dependencies ruby-dev build-base'
             sh 'gem install inspec --no-ri --no-rdoc'
-
-
+            sh 'inspec exec test/integration'
           }
           // { c ->
           //  sh 'echo INNER PWD=$(pwd)'
