@@ -13,10 +13,14 @@ node {
        }
 
        stage('Test') {
-          mkdocsImage.withRun("-v ${pwd()}/test/mock:/opt/docs -v ${pwd()}/test/integration:/test -p 8000:8000", 'serve') { c ->
+          def doc_mount = "${pwd()}/test/mock:/opt/docs"
+          def test_mount = "${pwd()}/test/integration/default:/test"
+          def options = "-v ${doc_mount} -v ${test_mount} -p 8000:8000"
+          mkdocsImage.withRun(options, 'serve') { c ->
             // Install Ruby + InSpec
             sh 'apk --update add --virtual build-dependencies ruby-dev build-base'
             sh 'gem install inspec --no-ri --no-rdoc'
+            sh 'ls /test'
             sh 'inspec exec /test'
           }
           // { c ->
