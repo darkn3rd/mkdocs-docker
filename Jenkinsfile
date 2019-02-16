@@ -18,7 +18,7 @@ node {
           mkdocsImage.withRun(options, 'serve') { c ->
             // Install Ruby + InSpec
             sh 'apk --update add --virtual build-dependencies ruby-dev build-base libxml2-dev libffi-dev git openssh-client'
-            sh 'gem update --system'
+            //sh 'gem update --system'
             sh 'gem install inspec --no-ri --no-rdoc'
             sh "inspec exec ${pwd()}/test/integration/default -t docker://${c.id}"
           }
