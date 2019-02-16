@@ -2,7 +2,7 @@ FROM python:3.7.2
 RUN pip install --upgrade pip
 ENV APPDIR /opt/app
 ENV DOCDIR /opt/docs
-RUN mkdir -p ${APPDIR} ${DOCDIR}
+RUN mkdir -p ${APPDIR}/test ${DOCDIR}
 
 # Install Components
 ADD requirements.txt ${APPDIR}/
