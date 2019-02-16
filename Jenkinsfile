@@ -18,7 +18,7 @@ node {
           mkdocsImage.withRun(options, 'serve') { c ->
             // Install Ruby + InSpec
             def sys_libs = "build-dependencies build-base"
-            def ruby_base = "ruby ruby-bundler ruby-dev ruby-json ruby-io-console ruby-bundler"
+            def ruby_base = "ruby ruby-bundler ruby-dev ruby-json ruby-io-console ruby-bundler ruby-rdoc"
             def ruby_libs = "libxml2-dev libffi-dev libxslt-dev zlib-dev"
             sh "apk --update add --virtual ${sys_libs} ${ruby_base} ${ruby_libs}"
             // git openssh-client
