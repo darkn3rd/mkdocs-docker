@@ -17,7 +17,12 @@ node {
           def options = "-v ${doc_mount} -p 8000:8000"
           mkdocsImage.withRun(options, 'serve') { c ->
             // Install Ruby + InSpec
-            sh 'apk --update add --virtual build-dependencies ruby-dev build-base libxml2-dev libffi-dev git openssh-client'
+            def sys_libs = "build-dependencies build-base"
+            def ruby_base = "ruby ruby-bundler ruby-dev ruby-json"
+            def ruby_libs = "libxml2-dev libffi-dev libxslt-dev zlib-dev"
+            sh "apk --update add --virtual ${sys_libs} ${ruby_base} ${ruby_libs}"
+            // git openssh-client
+             
             //sh 'gem update --system'
             sh 'gem install inspec --no-rdoc'
             sh "inspec exec ${pwd()}/test/integration/default -t docker://${c.id}"
