@@ -25,7 +25,7 @@ node {
 
             //sh 'gem update --system'
             sh 'gem install --no-document inspec'
-            sh "inspec exec ${pwd()}/test/integration/default -t docker://${c.name}"
+            sh "inspec exec ${pwd()}/test/integration/default -t docker://mkdocs_jenkins"
           }
 
        }
